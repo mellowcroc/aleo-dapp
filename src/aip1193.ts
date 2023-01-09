@@ -6,8 +6,8 @@ import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
 import SafeEventEmitter from "@metamask/safe-event-emitter";
 
 export const enum WrapperType {
-  LeoWallet = "NO_DECRYPT",
-  UponRequest = "DECRYPT_UPON_REQUEST",
+  LeoWallet = "LeoWallet",
+  AIP1193Wallet = "AIP1193Wallet",
 }
 
 export const enum RPCErrorCode {
@@ -68,6 +68,14 @@ export class LeoAIP1193Wrapper extends SafeEventEmitter implements AIP1193 {
     if (type === WrapperType.LeoWallet) {
       this._leoWalletAdapter = new LeoWalletAdapter({
         appName: "New Leo Demo App",
+      });
+      this._leoWalletAdapter?.on("connect", (publicKey) => {
+        console.log("connected: ", publicKey);
+        this.emit("connect", publicKey);
+      });
+      this._leoWalletAdapter?.on("disconnect", () => {
+        console.log("disconnected");
+        this.emit("disconnect");
       });
     } else {
       this._leoWalletAdapter = null;

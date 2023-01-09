@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 // import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
 import {
   DecryptPermission,
@@ -6,11 +6,12 @@ import {
 } from '@demox-labs/aleo-wallet-adapter-base';
 import { LeoAIP1193Wrapper, WrapperType } from './aip1193';
 import useConnect from './useConnect';
+import useDisconnect from './useDisconnect';
 
 // Default styles that can be overridden by your app
 require('@demox-labs/aleo-wallet-adapter-reactui/styles.css');
 
-export const Wallet: FC = () => {
+export const Wallet = () => {
   const wallet = useMemo(
     () =>
       new LeoAIP1193Wrapper(
@@ -20,12 +21,22 @@ export const Wallet: FC = () => {
       ),
     [],
   );
+  wallet.on('connect', (publicKey) => {
+    console.log('external listener connect: ', publicKey);
+  });
+  wallet.on('disconnect', () => {
+    console.log('external listener disconnect');
+  });
 
   const { connect, publicKey } = useConnect(wallet);
-  console.log('publicKey: ', publicKey);
+  const { disconnect } = useDisconnect(wallet);
+  console.log('wallet: ', wallet);
 
-  return publicKey ? (
-    <p>Connected: ${publicKey}</p>
+  return wallet.publicKey ? (
+    <p>
+      Connected: ${wallet.publicKey}
+      <button onClick={disconnect}>Disconnect</button>
+    </p>
   ) : (
     <button onClick={connect}>Connect</button>
   );

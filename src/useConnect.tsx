@@ -12,7 +12,7 @@ const useConnect = (wallet: LeoAIP1193Wrapper) => {
     } catch (err) {
       console.log(err);
     }
-  }, [wallet, publicKey]);
+  }, [wallet]);
 
   return { connect, publicKey };
 };
