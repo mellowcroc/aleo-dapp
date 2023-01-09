@@ -1,38 +1,36 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
-import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
-import {
-  WalletModal,
-  WalletModalProvider,
-} from "@demox-labs/aleo-wallet-adapter-reactui";
+import { useMemo } from 'react';
 // import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
-import { AIP1193Wrapper, WrapperType } from "./aip1193";
 import {
   DecryptPermission,
   WalletAdapterNetwork,
-} from "@demox-labs/aleo-wallet-adapter-base";
-import { RequestViewKey } from "./RequestViewKey";
-import { SignMessage } from "./SignMessage";
-import { DecryptMessage } from "./DecryptMessage";
-import { WalletConnectButton } from "@demox-labs/aleo-wallet-adapter-reactui";
-import { SelectWallet } from "./SelectWallet";
-import useConnect from "./useConnect";
-import useDisconnect from "./useDisconnect";
+} from '@demox-labs/aleo-wallet-adapter-base';
+import { LeoAIP1193Wrapper, WrapperType } from './aip1193';
+import useConnect from './useConnect';
+import useDisconnect from './useDisconnect';
 
 // Default styles that can be overridden by your app
-require("@demox-labs/aleo-wallet-adapter-reactui/styles.css");
+require('@demox-labs/aleo-wallet-adapter-reactui/styles.css');
 
 export const Wallet = () => {
-  const wallet = useMemo(() => new AIP1193Wrapper(WrapperType.LeoWallet), []);
-  wallet.on("connect", (publicKey) => {
-    console.log("external listener connect: ", publicKey);
+  const wallet = useMemo(
+    () =>
+      new LeoAIP1193Wrapper(
+        WrapperType.LeoWallet,
+        DecryptPermission.UponRequest,
+        WalletAdapterNetwork.Localnet,
+      ),
+    [],
+  );
+  wallet.on('connect', (publicKey) => {
+    console.log('external listener connect: ', publicKey);
   });
-  wallet.on("disconnect", () => {
-    console.log("external listener disconnect");
+  wallet.on('disconnect', () => {
+    console.log('external listener disconnect');
   });
 
   const { connect, publicKey } = useConnect(wallet);
   const { disconnect } = useDisconnect(wallet);
-  console.log("wallet: ", wallet);
+  console.log('wallet: ', wallet);
 
   return wallet.publicKey ? (
     <p>

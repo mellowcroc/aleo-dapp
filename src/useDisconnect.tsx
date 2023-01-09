@@ -1,15 +1,11 @@
-import { useCallback, useState } from "react";
-import { AIP1193Wrapper, WrapperType } from "./aip1193";
-import {
-  DecryptPermission,
-  WalletAdapterNetwork,
-} from "@demox-labs/aleo-wallet-adapter-base";
+import { useCallback } from 'react';
+import { LeoAIP1193Wrapper } from './aip1193';
 
-const useDisconnect = (wallet: AIP1193Wrapper) => {
+const useDisconnect = (wallet: LeoAIP1193Wrapper) => {
   const disconnect = useCallback(async () => {
     try {
       await wallet.disconnect();
-      console.log("wallet.publicKey: ", wallet.publicKey);
+      console.log('wallet.publicKey: ', wallet.publicKey);
     } catch (err) {
       console.log(err);
     }
