@@ -1,10 +1,11 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
 import {
   WalletModal,
   WalletModalProvider,
 } from "@demox-labs/aleo-wallet-adapter-reactui";
-import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
+// import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
+import { AIP1193Wrapper, WrapperType } from "./aip1193";
 import {
   DecryptPermission,
   WalletAdapterNetwork,
@@ -14,34 +15,35 @@ import { SignMessage } from "./SignMessage";
 import { DecryptMessage } from "./DecryptMessage";
 import { WalletConnectButton } from "@demox-labs/aleo-wallet-adapter-reactui";
 import { SelectWallet } from "./SelectWallet";
+import useConnect from "./useConnect";
 
 // Default styles that can be overridden by your app
 require("@demox-labs/aleo-wallet-adapter-reactui/styles.css");
 
 export const Wallet: FC = () => {
-  const wallets = useMemo(
-    () => [
-      new LeoWalletAdapter({
-        appName: "Leo Demo App",
-      }),
-    ],
-    []
+  const wallet = useMemo(() => new AIP1193Wrapper(WrapperType.LeoWallet), []);
+
+  const { connect, publicKey } = useConnect(wallet);
+  console.log("publicKey: ", publicKey);
+
+  return publicKey ? (
+    <p>Connected: ${publicKey}</p>
+  ) : (
+    <button onClick={connect}>Connect</button>
   );
 
-  return (
-    <WalletProvider
-      wallets={wallets}
-      decryptPermission={DecryptPermission.UponRequest}
-      network={WalletAdapterNetwork.Localnet}
-      autoConnect
-    >
-      <WalletModalProvider>
-        <SelectWallet />
-        <WalletConnectButton />
-        <SignMessage />
-        <DecryptMessage />
-        <RequestViewKey />
-      </WalletModalProvider>
-    </WalletProvider>
-  );
+  // <WalletProvider
+  //   wallets={wallets}
+  //   decryptPermission={DecryptPermission.UponRequest}
+  //   network={WalletAdapterNetwork.Localnet}
+  //   autoConnect
+  // >
+  //   <WalletModalProvider>
+  //     <SelectWallet />
+  //     <WalletConnectButton />
+  //     <SignMessage />
+  //     <DecryptMessage />
+  //     <RequestViewKey />
+  //   </WalletModalProvider>
+  // </WalletProvider>
 };
