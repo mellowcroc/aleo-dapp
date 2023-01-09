@@ -23,6 +23,12 @@ require("@demox-labs/aleo-wallet-adapter-reactui/styles.css");
 
 export const Wallet = () => {
   const wallet = useMemo(() => new AIP1193Wrapper(WrapperType.LeoWallet), []);
+  wallet.on("connect", (publicKey) => {
+    console.log("external listener connect: ", publicKey);
+  });
+  wallet.on("disconnect", () => {
+    console.log("external listener disconnect");
+  });
 
   const { connect, publicKey } = useConnect(wallet);
   const { disconnect } = useDisconnect(wallet);
