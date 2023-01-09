@@ -5,8 +5,8 @@ import {
 } from "@demox-labs/aleo-wallet-adapter-base/types";
 
 export const enum WrapperType {
-  LeoWallet = "NO_DECRYPT",
-  UponRequest = "DECRYPT_UPON_REQUEST",
+  LeoWallet = "LeoWallet",
+  AIP1193Wallet = "AIP1193Wallet",
 }
 
 export class AIP1193Wrapper {
