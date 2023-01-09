@@ -1,6 +1,6 @@
 # aleo-dapp
 
-This is a demo dapp that connects with both an ARC-1193 compatible wallet and Leo Wallet.
+This is a demo dapp that connects with both an [ARC-1193](https://github.com/AleoHQ/ARCs/pull/31) compatible wallet and a non-compatible wallet (Leo Wallet).
 
 <img
   src="./demo.png"
