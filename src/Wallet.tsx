@@ -16,18 +16,23 @@ import { DecryptMessage } from "./DecryptMessage";
 import { WalletConnectButton } from "@demox-labs/aleo-wallet-adapter-reactui";
 import { SelectWallet } from "./SelectWallet";
 import useConnect from "./useConnect";
+import useDisconnect from "./useDisconnect";
 
 // Default styles that can be overridden by your app
 require("@demox-labs/aleo-wallet-adapter-reactui/styles.css");
 
-export const Wallet: FC = () => {
+export const Wallet = () => {
   const wallet = useMemo(() => new AIP1193Wrapper(WrapperType.LeoWallet), []);
 
   const { connect, publicKey } = useConnect(wallet);
-  console.log("publicKey: ", publicKey);
+  const { disconnect } = useDisconnect(wallet);
+  console.log("wallet: ", wallet);
 
-  return publicKey ? (
-    <p>Connected: ${publicKey}</p>
+  return wallet.publicKey ? (
+    <p>
+      Connected: ${wallet.publicKey}
+      <button onClick={disconnect}>Disconnect</button>
+    </p>
   ) : (
     <button onClick={connect}>Connect</button>
   );

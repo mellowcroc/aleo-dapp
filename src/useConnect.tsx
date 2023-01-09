@@ -6,7 +6,7 @@ import {
 } from "@demox-labs/aleo-wallet-adapter-base";
 
 const useConnect = (wallet: AIP1193Wrapper) => {
-  const [publicKey, setPublicKey] = useState();
+  const [publicKey, setPublicKey] = useState("");
 
   const connect = useCallback(async () => {
     try {
@@ -15,11 +15,13 @@ const useConnect = (wallet: AIP1193Wrapper) => {
         WalletAdapterNetwork.Localnet
       );
       console.log("wallet.publicKey: ", wallet.publicKey);
-      setPublicKey(publicKey);
+      if (wallet.publicKey) {
+        setPublicKey(wallet.publicKey);
+      }
     } catch (err) {
       console.log(err);
     }
-  }, [wallet, publicKey]);
+  }, [wallet]);
 
   return { connect, publicKey };
 };
