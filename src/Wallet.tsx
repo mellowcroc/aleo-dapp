@@ -1,30 +1,28 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
-import { WalletProvider } from "@demox-labs/aleo-wallet-adapter-react";
-import {
-  WalletModal,
-  WalletModalProvider,
-} from "@demox-labs/aleo-wallet-adapter-reactui";
+import { FC, useMemo } from 'react';
 // import { LeoWalletAdapter } from "@demox-labs/aleo-wallet-adapter-leo";
-import { AIP1193Wrapper, WrapperType } from "./aip1193";
 import {
   DecryptPermission,
   WalletAdapterNetwork,
-} from "@demox-labs/aleo-wallet-adapter-base";
-import { RequestViewKey } from "./RequestViewKey";
-import { SignMessage } from "./SignMessage";
-import { DecryptMessage } from "./DecryptMessage";
-import { WalletConnectButton } from "@demox-labs/aleo-wallet-adapter-reactui";
-import { SelectWallet } from "./SelectWallet";
-import useConnect from "./useConnect";
+} from '@demox-labs/aleo-wallet-adapter-base';
+import { LeoAIP1193Wrapper, WrapperType } from './aip1193';
+import useConnect from './useConnect';
 
 // Default styles that can be overridden by your app
-require("@demox-labs/aleo-wallet-adapter-reactui/styles.css");
+require('@demox-labs/aleo-wallet-adapter-reactui/styles.css');
 
 export const Wallet: FC = () => {
-  const wallet = useMemo(() => new AIP1193Wrapper(WrapperType.LeoWallet), []);
+  const wallet = useMemo(
+    () =>
+      new LeoAIP1193Wrapper(
+        WrapperType.LeoWallet,
+        DecryptPermission.UponRequest,
+        WalletAdapterNetwork.Localnet,
+      ),
+    [],
+  );
 
   const { connect, publicKey } = useConnect(wallet);
-  console.log("publicKey: ", publicKey);
+  console.log('publicKey: ', publicKey);
 
   return publicKey ? (
     <p>Connected: ${publicKey}</p>
